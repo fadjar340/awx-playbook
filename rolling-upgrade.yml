@@ -1,0 +1,32 @@
+- name: Update OS Rolling Upgrade
+  hosts: all
+  serial: 1
+  tasks:
+   - name: What is my ansible_hostname
+     debug: var={{ansible_nodename}}
+
+   - name: Update packages
+     become: yes
+     become_method: sudo
+     become_user: root
+     apt:
+       update_cache: yes
+       cache_valid_time: 86400
+
+   - name: Upgrade packages
+     become: yes
+     become_method: sudo
+     become_user: root
+     apt:
+       upgrade: dist
+
+   - name: Autoremove packages
+     become: yes
+     become_method: sudo
+     become_user: root
+     apt:
+       autoremove: yes
+
+   - name: Pause after upgrade
+     pause:
+       minutes: 15
