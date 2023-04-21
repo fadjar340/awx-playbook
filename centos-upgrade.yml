@@ -1,0 +1,23 @@
+- name: Update RPM Based OS Rolling Upgrade
+  hosts: all
+  serial: 1
+  tasks:
+   - name: What is my ansible_hostname
+     debug: var={{ansible_nodename}}
+
+   - name: Upgrade all package RHEL based distros
+     yum:
+       name: "*"
+       state: latest
+       update_cache: true
+     become: true
+
+   # Handler showing how to clean yum metadata cache
+   - name: yum-clean-metadata
+     yum:
+       autoremove: true
+     become: true
+
+   - name: Pause after upgrade
+     pause:
+       minutes: 15
